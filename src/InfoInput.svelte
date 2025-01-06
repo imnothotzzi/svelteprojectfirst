@@ -21,6 +21,8 @@
 		cholesterol: ''
 	};
 
+	let errorMessage = '';
+
 	const steps = [
 		{ field: 'name', label: '성함', type: 'text', required: true },
 		{ field: 'age', label: '연령', type: 'number', required: true },
@@ -51,6 +53,7 @@
 
 	function handleNext() {
 		if (isValidInput()) {
+			errorMessage = '';
 			if (currentStep < steps.length - 1) {
 				currentStep++;
 			} else {
@@ -60,6 +63,7 @@
 	}
 
 	function handleBack() {
+		errorMessage = '';
 		if (currentStep > 0) {
 			currentStep--;
 		} else {
@@ -68,6 +72,7 @@
 	}
 
 	function handleSkip() {
+		errorMessage = '';
 		if (!steps[currentStep].required) {
 			if (Array.isArray(steps[currentStep].field)) {
 				steps[currentStep].field.forEach(field => {
@@ -76,23 +81,42 @@
 			} else {
 				userInfo[steps[currentStep].field] = null;
 			}
-			currentStep++;
+			if (currentStep < steps.length - 1) {
+				currentStep++;
+			} else {
+				dispatch('finish', userInfo);
+			}
 		}
 	}
 
 	function isValidInput() {
 		const currentStepInfo = steps[currentStep];
 		
+		if (currentStepInfo.field === 'walking' || currentStepInfo.field === 'cholesterol') {
+			return true;  // 걸음 수와 콜레스테롤은 필수 입력이 아니므로, 항상 true를 반환
+		}
+
 		if (Array.isArray(currentStepInfo.field)) {
-			return currentStepInfo.field.every(field => {
-				const value = userInfo[field];
-				return !currentStepInfo.required || (value !== '' && value !== null && value !== undefined);
-			});
+			// 혈압 입력 검증
+			const systolic = userInfo.systolicBP;
+			const diastolic = userInfo.diastolicBP;
+			if ((systolic && !diastolic) || (!systolic && diastolic)) {
+				errorMessage = '수축기 혈압과 이완기 혈압을 모두 입력해주세요.';
+				return false;
+			}
+			return true;
 		} else {
 			const value = userInfo[currentStepInfo.field];
 			
 			if (currentStepInfo.required && (value === '' || value === null || value === undefined)) {
 				return false;
+			}
+
+			if (currentStepInfo.field === 'name') {
+				if (!/^[가-힣a-zA-Z\s]+$/.test(value)) {
+					errorMessage = '이름은 문자만 입력 가능합니다.';
+					return false;
+				}
 			}
 
 			if (currentStepInfo.type === 'number') {
@@ -107,6 +131,10 @@
 						return false;
 					}
 				}
+			}
+
+			if (currentStepInfo.type === 'select') {
+				return currentStepInfo.options.includes(value);
 			}
 		}
 
@@ -136,11 +164,22 @@
 		} else {
 			userInfo[currentField] = option;
 		}
+		userInfo = {...userInfo};
+	}
+
+	function handleInput(event) {
+		if (steps[currentStep].field === 'name') {
+			event.target.value = event.target.value.replace(/[^가-힣a-zA-Z\s]/g, '');
+		}
 	}
 </script>
 
 <div class="info-input">
 	<h2>{steps[currentStep].label}</h2>
+	
+	{#if errorMessage}
+		<p class="error">{errorMessage}</p>
+	{/if}
 	
 	{#if steps[currentStep].type === 'select'}
 		<div class="button-group">
@@ -187,7 +226,7 @@
 			bind:value={userInfo[steps[currentStep].field]}
 			step={steps[currentStep].step}
 			required={steps[currentStep].required}
-			on:input={() => userInfo = {...userInfo}}
+			on:input={handleInput}
 		>
 	{/if}
 
@@ -259,5 +298,10 @@
 
 	.input-group label {
 		margin-bottom: 0.5em;
+	}
+
+	.error {
+		color: red;
+		margin-bottom: 1em;
 	}
 </style>

@@ -887,7 +887,7 @@ var app = (function () {
     }
 
     // (228:53) 
-    function create_if_block_2$1(ctx) {
+    function create_if_block_2$2(ctx) {
     	let div;
     	let label0;
     	let t0;
@@ -975,7 +975,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_2$1.name,
+    		id: create_if_block_2$2.name,
     		type: "if",
     		source: "(228:53) ",
     		ctx
@@ -1203,7 +1203,7 @@ var app = (function () {
     		if (dirty & /*currentStep*/ 1) show_if = null;
     		if (/*steps*/ ctx[5][/*currentStep*/ ctx[0]].type === 'select') return create_if_block_1$2;
     		if (show_if == null) show_if = !!Array.isArray(/*steps*/ ctx[5][/*currentStep*/ ctx[0]].field);
-    		if (show_if) return create_if_block_2$1;
+    		if (show_if) return create_if_block_2$2;
     		return create_else_block$1;
     	}
 
@@ -2090,28 +2090,28 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[17] = list[i];
-    	child_ctx[19] = i;
+    	child_ctx[21] = list[i];
+    	child_ctx[23] = i;
     	return child_ctx;
     }
 
     function get_each_context_1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[20] = list[i];
+    	child_ctx[24] = list[i];
     	return child_ctx;
     }
 
-    // (156:6) {#each categories as category}
+    // (172:6) {#each categories as category}
     function create_each_block_1(ctx) {
     	let button;
-    	let t0_value = /*category*/ ctx[20].replace('60대노인건강 ', '') + "";
+    	let t0_value = /*category*/ ctx[24].replace('60대노인건강 ', '') + "";
     	let t0;
     	let t1;
     	let mounted;
     	let dispose;
 
     	function click_handler_1() {
-    		return /*click_handler_1*/ ctx[13](/*category*/ ctx[20]);
+    		return /*click_handler_1*/ ctx[16](/*category*/ ctx[24]);
     	}
 
     	const block = {
@@ -2119,9 +2119,9 @@ var app = (function () {
     			button = element("button");
     			t0 = text(t0_value);
     			t1 = space();
-    			attr_dev(button, "class", "category-button svelte-geh4wo");
-    			toggle_class(button, "selected", /*selectedCategory*/ ctx[3] === /*category*/ ctx[20] && /*focusArea*/ ctx[1] === 'category');
-    			add_location(button, file$1, 156, 8, 4578);
+    			attr_dev(button, "class", "category-button svelte-y3year");
+    			toggle_class(button, "selected", /*selectedCategory*/ ctx[2] === /*category*/ ctx[24] && /*focusArea*/ ctx[6] === 'category');
+    			add_location(button, file$1, 172, 8, 5265);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -2136,8 +2136,8 @@ var app = (function () {
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
 
-    			if (dirty & /*selectedCategory, categories, focusArea*/ 138) {
-    				toggle_class(button, "selected", /*selectedCategory*/ ctx[3] === /*category*/ ctx[20] && /*focusArea*/ ctx[1] === 'category');
+    			if (dirty & /*selectedCategory, categories, focusArea*/ 580) {
+    				toggle_class(button, "selected", /*selectedCategory*/ ctx[2] === /*category*/ ctx[24] && /*focusArea*/ ctx[6] === 'category');
     			}
     		},
     		d: function destroy(detaching) {
@@ -2151,14 +2151,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(156:6) {#each categories as category}",
+    		source: "(172:6) {#each categories as category}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (194:8) {:else}
+    // (220:8) {:else}
     function create_else_block(ctx) {
     	let div;
 
@@ -2166,8 +2166,8 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			div.textContent = "영상을 불러오는 중입니다...";
-    			attr_dev(div, "class", "loading svelte-geh4wo");
-    			add_location(div, file$1, 194, 10, 5957);
+    			attr_dev(div, "class", "loading svelte-y3year");
+    			add_location(div, file$1, 220, 10, 7047);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2182,17 +2182,18 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(194:8) {:else}",
+    		source: "(220:8) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (171:8) {#if videos[selectedCategory]}
+    // (187:8) {#if videos[selectedCategory]}
     function create_if_block_1$1(ctx) {
-    	let each_1_anchor;
-    	let each_value = /*videos*/ ctx[2][/*selectedCategory*/ ctx[3]];
+    	let t;
+    	let if_block_anchor;
+    	let each_value = /*videos*/ ctx[0][/*selectedCategory*/ ctx[2]];
     	validate_each_argument(each_value);
     	let each_blocks = [];
 
@@ -2200,13 +2201,17 @@ var app = (function () {
     		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
     	}
 
+    	let if_block = /*pageTokens*/ ctx[1][/*selectedCategory*/ ctx[2]] && create_if_block_2$1(ctx);
+
     	const block = {
     		c: function create() {
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
 
-    			each_1_anchor = empty();
+    			t = space();
+    			if (if_block) if_block.c();
+    			if_block_anchor = empty();
     		},
     		m: function mount(target, anchor) {
     			for (let i = 0; i < each_blocks.length; i += 1) {
@@ -2215,11 +2220,13 @@ var app = (function () {
     				}
     			}
 
-    			insert_dev(target, each_1_anchor, anchor);
+    			insert_dev(target, t, anchor);
+    			if (if_block) if_block.m(target, anchor);
+    			insert_dev(target, if_block_anchor, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*selectedIndex, focusArea, openVideo, videos, selectedCategory*/ 527) {
-    				each_value = /*videos*/ ctx[2][/*selectedCategory*/ ctx[3]];
+    			if (dirty & /*selectedIndex, focusArea, openVideo, videos, selectedCategory*/ 4197) {
+    				each_value = /*videos*/ ctx[0][/*selectedCategory*/ ctx[2]];
     				validate_each_argument(each_value);
     				let i;
 
@@ -2231,7 +2238,7 @@ var app = (function () {
     					} else {
     						each_blocks[i] = create_each_block(child_ctx);
     						each_blocks[i].c();
-    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    						each_blocks[i].m(t.parentNode, t);
     					}
     				}
 
@@ -2241,10 +2248,25 @@ var app = (function () {
 
     				each_blocks.length = each_value.length;
     			}
+
+    			if (/*pageTokens*/ ctx[1][/*selectedCategory*/ ctx[2]]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block_2$1(ctx);
+    					if_block.c();
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
     		},
     		d: function destroy(detaching) {
     			destroy_each(each_blocks, detaching);
-    			if (detaching) detach_dev(each_1_anchor);
+    			if (detaching) detach_dev(t);
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach_dev(if_block_anchor);
     		}
     	};
 
@@ -2252,14 +2274,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$1.name,
     		type: "if",
-    		source: "(171:8) {#if videos[selectedCategory]}",
+    		source: "(187:8) {#if videos[selectedCategory]}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (172:10) {#each videos[selectedCategory] as video, index}
+    // (188:10) {#each videos[selectedCategory] as video, index}
     function create_each_block(ctx) {
     	let div4;
     	let div2;
@@ -2272,18 +2294,17 @@ var app = (function () {
     	let t2;
     	let div3;
     	let h3;
-    	let t3_value = /*video*/ ctx[17].snippet.title + "";
+    	let t3_value = /*video*/ ctx[21].snippet.title + "";
     	let t3;
     	let t4;
     	let p;
-    	let t5_value = /*video*/ ctx[17].snippet.channelTitle + "";
+    	let t5_value = /*video*/ ctx[21].snippet.channelTitle + "";
     	let t5;
-    	let t6;
     	let mounted;
     	let dispose;
 
     	function click_handler_2() {
-    		return /*click_handler_2*/ ctx[14](/*video*/ ctx[17]);
+    		return /*click_handler_2*/ ctx[17](/*video*/ ctx[21]);
     	}
 
     	const block = {
@@ -2302,26 +2323,25 @@ var app = (function () {
     			t4 = space();
     			p = element("p");
     			t5 = text(t5_value);
-    			t6 = space();
-    			if (!src_url_equal(img.src, img_src_value = /*video*/ ctx[17].snippet.thumbnails.high.url)) attr_dev(img, "src", img_src_value);
-    			attr_dev(img, "alt", img_alt_value = /*video*/ ctx[17].snippet.title);
-    			attr_dev(img, "class", "thumbnail svelte-geh4wo");
-    			add_location(img, file$1, 178, 16, 5375);
-    			attr_dev(div0, "class", "play-button svelte-geh4wo");
-    			add_location(div0, file$1, 184, 18, 5606);
-    			attr_dev(div1, "class", "play-overlay svelte-geh4wo");
-    			add_location(div1, file$1, 183, 16, 5560);
-    			attr_dev(div2, "class", "thumbnail-wrapper svelte-geh4wo");
-    			add_location(div2, file$1, 177, 14, 5326);
-    			attr_dev(h3, "class", "video-title svelte-geh4wo");
-    			add_location(h3, file$1, 188, 16, 5742);
-    			attr_dev(p, "class", "channel-title svelte-geh4wo");
-    			add_location(p, file$1, 189, 16, 5810);
-    			attr_dev(div3, "class", "video-info svelte-geh4wo");
-    			add_location(div3, file$1, 187, 14, 5700);
-    			attr_dev(div4, "class", "video-card svelte-geh4wo");
-    			toggle_class(div4, "selected", /*index*/ ctx[19] === /*selectedIndex*/ ctx[0] && /*focusArea*/ ctx[1] === 'video');
-    			add_location(div4, file$1, 172, 12, 5125);
+    			if (!src_url_equal(img.src, img_src_value = /*video*/ ctx[21].snippet.thumbnails.high.url)) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "alt", img_alt_value = /*video*/ ctx[21].snippet.title);
+    			attr_dev(img, "class", "thumbnail svelte-y3year");
+    			add_location(img, file$1, 194, 16, 6062);
+    			attr_dev(div0, "class", "play-button svelte-y3year");
+    			add_location(div0, file$1, 200, 18, 6293);
+    			attr_dev(div1, "class", "play-overlay svelte-y3year");
+    			add_location(div1, file$1, 199, 16, 6247);
+    			attr_dev(div2, "class", "thumbnail-wrapper svelte-y3year");
+    			add_location(div2, file$1, 193, 14, 6013);
+    			attr_dev(h3, "class", "video-title svelte-y3year");
+    			add_location(h3, file$1, 204, 16, 6429);
+    			attr_dev(p, "class", "channel-title svelte-y3year");
+    			add_location(p, file$1, 205, 16, 6497);
+    			attr_dev(div3, "class", "video-info svelte-y3year");
+    			add_location(div3, file$1, 203, 14, 6387);
+    			attr_dev(div4, "class", "video-card svelte-y3year");
+    			toggle_class(div4, "selected", /*index*/ ctx[23] === /*selectedIndex*/ ctx[5] && /*focusArea*/ ctx[6] === 'video');
+    			add_location(div4, file$1, 188, 12, 5812);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div4, anchor);
@@ -2337,7 +2357,6 @@ var app = (function () {
     			append_dev(div3, t4);
     			append_dev(div3, p);
     			append_dev(p, t5);
-    			append_dev(div4, t6);
 
     			if (!mounted) {
     				dispose = listen_dev(div4, "click", click_handler_2, false, false, false, false);
@@ -2347,19 +2366,19 @@ var app = (function () {
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
 
-    			if (dirty & /*videos, selectedCategory*/ 12 && !src_url_equal(img.src, img_src_value = /*video*/ ctx[17].snippet.thumbnails.high.url)) {
+    			if (dirty & /*videos, selectedCategory*/ 5 && !src_url_equal(img.src, img_src_value = /*video*/ ctx[21].snippet.thumbnails.high.url)) {
     				attr_dev(img, "src", img_src_value);
     			}
 
-    			if (dirty & /*videos, selectedCategory*/ 12 && img_alt_value !== (img_alt_value = /*video*/ ctx[17].snippet.title)) {
+    			if (dirty & /*videos, selectedCategory*/ 5 && img_alt_value !== (img_alt_value = /*video*/ ctx[21].snippet.title)) {
     				attr_dev(img, "alt", img_alt_value);
     			}
 
-    			if (dirty & /*videos, selectedCategory*/ 12 && t3_value !== (t3_value = /*video*/ ctx[17].snippet.title + "")) set_data_dev(t3, t3_value);
-    			if (dirty & /*videos, selectedCategory*/ 12 && t5_value !== (t5_value = /*video*/ ctx[17].snippet.channelTitle + "")) set_data_dev(t5, t5_value);
+    			if (dirty & /*videos, selectedCategory*/ 5 && t3_value !== (t3_value = /*video*/ ctx[21].snippet.title + "")) set_data_dev(t3, t3_value);
+    			if (dirty & /*videos, selectedCategory*/ 5 && t5_value !== (t5_value = /*video*/ ctx[21].snippet.channelTitle + "")) set_data_dev(t5, t5_value);
 
-    			if (dirty & /*selectedIndex, focusArea*/ 3) {
-    				toggle_class(div4, "selected", /*index*/ ctx[19] === /*selectedIndex*/ ctx[0] && /*focusArea*/ ctx[1] === 'video');
+    			if (dirty & /*selectedIndex, focusArea*/ 96) {
+    				toggle_class(div4, "selected", /*index*/ ctx[23] === /*selectedIndex*/ ctx[5] && /*focusArea*/ ctx[6] === 'video');
     			}
     		},
     		d: function destroy(detaching) {
@@ -2373,14 +2392,69 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(172:10) {#each videos[selectedCategory] as video, index}",
+    		source: "(188:10) {#each videos[selectedCategory] as video, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (202:0) {#if showModal}
+    // (210:10) {#if pageTokens[selectedCategory]}
+    function create_if_block_2$1(ctx) {
+    	let button;
+    	let t_value = (/*isLoadingMore*/ ctx[8] ? '로딩 중...' : '더 보기') + "";
+    	let t;
+    	let mounted;
+    	let dispose;
+
+    	const block = {
+    		c: function create() {
+    			button = element("button");
+    			t = text(t_value);
+    			attr_dev(button, "class", "load-more-button svelte-y3year");
+    			button.disabled = /*isLoadingMore*/ ctx[8];
+    			toggle_class(button, "selected", /*selectedIndex*/ ctx[5] === /*videos*/ ctx[0][/*selectedCategory*/ ctx[2]].length && /*focusArea*/ ctx[6] === 'video');
+    			add_location(button, file$1, 210, 12, 6675);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, button, anchor);
+    			append_dev(button, t);
+
+    			if (!mounted) {
+    				dispose = listen_dev(button, "click", /*loadMoreVideos*/ ctx[10], false, false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*isLoadingMore*/ 256 && t_value !== (t_value = (/*isLoadingMore*/ ctx[8] ? '로딩 중...' : '더 보기') + "")) set_data_dev(t, t_value);
+
+    			if (dirty & /*isLoadingMore*/ 256) {
+    				prop_dev(button, "disabled", /*isLoadingMore*/ ctx[8]);
+    			}
+
+    			if (dirty & /*selectedIndex, videos, selectedCategory, focusArea*/ 101) {
+    				toggle_class(button, "selected", /*selectedIndex*/ ctx[5] === /*videos*/ ctx[0][/*selectedCategory*/ ctx[2]].length && /*focusArea*/ ctx[6] === 'video');
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(button);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_2$1.name,
+    		type: "if",
+    		source: "(210:10) {#if pageTokens[selectedCategory]}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (228:0) {#if showModal}
     function create_if_block$1(ctx) {
     	let div2;
     	let div1;
@@ -2402,21 +2476,21 @@ var app = (function () {
     			t1 = space();
     			div0 = element("div");
     			iframe = element("iframe");
-    			attr_dev(button, "class", "close-button svelte-geh4wo");
-    			add_location(button, file$1, 204, 6, 6201);
-    			if (!src_url_equal(iframe.src, iframe_src_value = "https://www.youtube.com/embed/" + /*selectedVideo*/ ctx[4].id.videoId + "?autoplay=1")) attr_dev(iframe, "src", iframe_src_value);
-    			attr_dev(iframe, "title", iframe_title_value = /*selectedVideo*/ ctx[4].snippet.title);
+    			attr_dev(button, "class", "close-button svelte-y3year");
+    			add_location(button, file$1, 230, 6, 7291);
+    			if (!src_url_equal(iframe.src, iframe_src_value = "https://www.youtube.com/embed/" + /*selectedVideo*/ ctx[3].id.videoId + "?autoplay=1")) attr_dev(iframe, "src", iframe_src_value);
+    			attr_dev(iframe, "title", iframe_title_value = /*selectedVideo*/ ctx[3].snippet.title);
     			attr_dev(iframe, "frameborder", "0");
     			attr_dev(iframe, "allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen");
     			iframe.allowFullscreen = true;
-    			attr_dev(iframe, "class", "svelte-geh4wo");
-    			add_location(iframe, file$1, 206, 8, 6313);
-    			attr_dev(div0, "class", "modal-video-wrapper svelte-geh4wo");
-    			add_location(div0, file$1, 205, 6, 6270);
-    			attr_dev(div1, "class", "modal-content svelte-geh4wo");
-    			add_location(div1, file$1, 203, 4, 6141);
-    			attr_dev(div2, "class", "modal-overlay svelte-geh4wo");
-    			add_location(div2, file$1, 202, 2, 6086);
+    			attr_dev(iframe, "class", "svelte-y3year");
+    			add_location(iframe, file$1, 232, 8, 7403);
+    			attr_dev(div0, "class", "modal-video-wrapper svelte-y3year");
+    			add_location(div0, file$1, 231, 6, 7360);
+    			attr_dev(div1, "class", "modal-content svelte-y3year");
+    			add_location(div1, file$1, 229, 4, 7231);
+    			attr_dev(div2, "class", "modal-overlay svelte-y3year");
+    			add_location(div2, file$1, 228, 2, 7176);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div2, anchor);
@@ -2428,20 +2502,20 @@ var app = (function () {
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(button, "click", /*closeModal*/ ctx[10], false, false, false, false),
-    					listen_dev(div1, "click", stop_propagation(/*click_handler*/ ctx[12]), false, false, true, false),
-    					listen_dev(div2, "click", /*closeModal*/ ctx[10], false, false, false, false)
+    					listen_dev(button, "click", /*closeModal*/ ctx[13], false, false, false, false),
+    					listen_dev(div1, "click", stop_propagation(/*click_handler*/ ctx[15]), false, false, true, false),
+    					listen_dev(div2, "click", /*closeModal*/ ctx[13], false, false, false, false)
     				];
 
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*selectedVideo*/ 16 && !src_url_equal(iframe.src, iframe_src_value = "https://www.youtube.com/embed/" + /*selectedVideo*/ ctx[4].id.videoId + "?autoplay=1")) {
+    			if (dirty & /*selectedVideo*/ 8 && !src_url_equal(iframe.src, iframe_src_value = "https://www.youtube.com/embed/" + /*selectedVideo*/ ctx[3].id.videoId + "?autoplay=1")) {
     				attr_dev(iframe, "src", iframe_src_value);
     			}
 
-    			if (dirty & /*selectedVideo*/ 16 && iframe_title_value !== (iframe_title_value = /*selectedVideo*/ ctx[4].snippet.title)) {
+    			if (dirty & /*selectedVideo*/ 8 && iframe_title_value !== (iframe_title_value = /*selectedVideo*/ ctx[3].snippet.title)) {
     				attr_dev(iframe, "title", iframe_title_value);
     			}
     		},
@@ -2456,7 +2530,7 @@ var app = (function () {
     		block,
     		id: create_if_block$1.name,
     		type: "if",
-    		source: "(202:0) {#if showModal}",
+    		source: "(228:0) {#if showModal}",
     		ctx
     	});
 
@@ -2477,7 +2551,7 @@ var app = (function () {
     	let if_block1_anchor;
     	let mounted;
     	let dispose;
-    	let each_value_1 = /*categories*/ ctx[7];
+    	let each_value_1 = /*categories*/ ctx[9];
     	validate_each_argument(each_value_1);
     	let each_blocks = [];
 
@@ -2486,13 +2560,13 @@ var app = (function () {
     	}
 
     	function select_block_type(ctx, dirty) {
-    		if (/*videos*/ ctx[2][/*selectedCategory*/ ctx[3]]) return create_if_block_1$1;
+    		if (/*videos*/ ctx[0][/*selectedCategory*/ ctx[2]]) return create_if_block_1$1;
     		return create_else_block;
     	}
 
     	let current_block_type = select_block_type(ctx);
     	let if_block0 = current_block_type(ctx);
-    	let if_block1 = /*showModal*/ ctx[5] && create_if_block$1(ctx);
+    	let if_block1 = /*showModal*/ ctx[4] && create_if_block$1(ctx);
 
     	const block = {
     		c: function create() {
@@ -2515,20 +2589,20 @@ var app = (function () {
     			t3 = space();
     			if (if_block1) if_block1.c();
     			if_block1_anchor = empty();
-    			attr_dev(h1, "class", "svelte-geh4wo");
-    			add_location(h1, file$1, 153, 4, 4477);
-    			attr_dev(div0, "class", "category-buttons svelte-geh4wo");
-    			add_location(div0, file$1, 154, 4, 4500);
-    			attr_dev(header, "class", "svelte-geh4wo");
-    			add_location(header, file$1, 152, 2, 4463);
-    			attr_dev(div1, "class", "video-container svelte-geh4wo");
-    			add_location(div1, file$1, 169, 6, 4982);
-    			attr_dev(div2, "class", "video-scroll svelte-geh4wo");
-    			add_location(div2, file$1, 168, 4, 4920);
-    			attr_dev(section, "class", "video-section");
-    			add_location(section, file$1, 167, 2, 4883);
-    			attr_dev(div3, "class", "main-container svelte-geh4wo");
-    			add_location(div3, file$1, 151, 0, 4431);
+    			attr_dev(h1, "class", "svelte-y3year");
+    			add_location(h1, file$1, 169, 4, 5164);
+    			attr_dev(div0, "class", "category-buttons svelte-y3year");
+    			add_location(div0, file$1, 170, 4, 5187);
+    			attr_dev(header, "class", "svelte-y3year");
+    			add_location(header, file$1, 168, 2, 5150);
+    			attr_dev(div1, "class", "video-container svelte-y3year");
+    			add_location(div1, file$1, 185, 6, 5669);
+    			attr_dev(div2, "class", "video-scroll svelte-y3year");
+    			add_location(div2, file$1, 184, 4, 5607);
+    			attr_dev(section, "class", "video-section svelte-y3year");
+    			add_location(section, file$1, 183, 2, 5570);
+    			attr_dev(div3, "class", "page-container svelte-y3year");
+    			add_location(div3, file$1, 167, 0, 5118);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2551,19 +2625,19 @@ var app = (function () {
     			append_dev(section, div2);
     			append_dev(div2, div1);
     			if_block0.m(div1, null);
-    			/*div2_binding*/ ctx[15](div2);
+    			/*div2_binding*/ ctx[18](div2);
     			insert_dev(target, t3, anchor);
     			if (if_block1) if_block1.m(target, anchor);
     			insert_dev(target, if_block1_anchor, anchor);
 
     			if (!mounted) {
-    				dispose = listen_dev(window, "keydown", /*handleKeydown*/ ctx[11], false, false, false, false);
+    				dispose = listen_dev(window, "keydown", /*handleKeydown*/ ctx[14], false, false, false, false);
     				mounted = true;
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*selectedCategory, categories, focusArea, selectCategory*/ 394) {
-    				each_value_1 = /*categories*/ ctx[7];
+    			if (dirty & /*selectedCategory, categories, focusArea, selectCategory*/ 2628) {
+    				each_value_1 = /*categories*/ ctx[9];
     				validate_each_argument(each_value_1);
     				let i;
 
@@ -2598,7 +2672,7 @@ var app = (function () {
     				}
     			}
 
-    			if (/*showModal*/ ctx[5]) {
+    			if (/*showModal*/ ctx[4]) {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
     				} else {
@@ -2617,7 +2691,7 @@ var app = (function () {
     			if (detaching) detach_dev(div3);
     			destroy_each(each_blocks, detaching);
     			if_block0.d();
-    			/*div2_binding*/ ctx[15](null);
+    			/*div2_binding*/ ctx[18](null);
     			if (detaching) detach_dev(t3);
     			if (if_block1) if_block1.d(detaching);
     			if (detaching) detach_dev(if_block1_anchor);
@@ -2639,70 +2713,82 @@ var app = (function () {
 
     const API_KEY = 'AIzaSyA8jsudsy9m8m6FxHhlWjsWoOakvY_-yZU';
 
-    async function fetchVideos(category) {
-    	try {
-    		const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${encodeURIComponent(category)}&type=video&key=${API_KEY}`);
-    		const data = await response.json();
-    		return data.items;
-    	} catch(error) {
-    		console.error('Error fetching videos:', error);
-    		return [];
-    	}
-    }
-
     function instance$1($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('MainPage', slots, []);
     	const categories = ["60대노인건강 관절", "60대노인건강 고혈압", "60대노인건강 감기", "60대노인건강 뇌졸중", "60대노인건강 당뇨"];
     	let videos = {};
+    	let pageTokens = {};
     	let selectedCategory = categories[0];
     	let selectedVideo = null;
     	let showModal = false;
     	let selectedIndex = 0;
     	let focusArea = 'category';
     	let scrollContainer;
+    	let isLoadingMore = false;
+
+    	async function fetchVideos(category, pageToken = '') {
+    		try {
+    			const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${encodeURIComponent(category)}&type=video&key=${API_KEY}${pageToken ? `&pageToken=${pageToken}` : ''}`);
+    			const data = await response.json();
+    			$$invalidate(1, pageTokens[category] = data.nextPageToken, pageTokens);
+    			return data.items;
+    		} catch(error) {
+    			console.error('Error fetching videos:', error);
+    			return [];
+    		}
+    	}
+
+    	async function loadMoreVideos() {
+    		if (isLoadingMore || !pageTokens[selectedCategory]) return;
+    		$$invalidate(8, isLoadingMore = true);
+    		const newVideos = await fetchVideos(selectedCategory, pageTokens[selectedCategory]);
+
+    		if (newVideos.length > 0) {
+    			$$invalidate(0, videos[selectedCategory] = [...videos[selectedCategory], ...newVideos], videos);
+    			$$invalidate(0, videos = { ...videos });
+    		}
+
+    		$$invalidate(8, isLoadingMore = false);
+    	}
 
     	function selectCategory(category) {
-    		$$invalidate(3, selectedCategory = category);
-    		$$invalidate(0, selectedIndex = 0);
-    		$$invalidate(1, focusArea = 'video');
+    		$$invalidate(2, selectedCategory = category);
+    		$$invalidate(5, selectedIndex = 0);
+    		$$invalidate(6, focusArea = 'video');
 
     		if (!videos[category]) {
     			fetchVideos(category).then(result => {
-    				$$invalidate(2, videos[category] = result, videos);
-    				$$invalidate(2, videos = { ...videos });
+    				$$invalidate(0, videos[category] = result, videos);
+    				$$invalidate(0, videos = { ...videos });
     			});
     		}
     	}
 
     	function openVideo(video) {
-    		$$invalidate(4, selectedVideo = video);
-    		$$invalidate(5, showModal = true);
+    		$$invalidate(3, selectedVideo = video);
+    		$$invalidate(4, showModal = true);
     	}
 
     	function closeModal() {
-    		$$invalidate(5, showModal = false);
-    		$$invalidate(4, selectedVideo = null);
+    		$$invalidate(4, showModal = false);
+    		$$invalidate(3, selectedVideo = null);
     	}
 
     	function scrollToSelectedCard() {
     		if (focusArea === 'video' && scrollContainer) {
-    			const selectedCard = scrollContainer.querySelector(`.video-card:nth-child(${selectedIndex + 1})`);
+    			const selectedCard = scrollContainer.querySelector(`.video-card:nth-child(${selectedIndex + 1}), .load-more-button`);
 
     			if (selectedCard) {
     				const containerWidth = scrollContainer.offsetWidth;
     				const cardLeft = selectedCard.offsetLeft;
     				const cardWidth = selectedCard.offsetWidth;
-
-    				// 선택된 카드가 컨테이너의 중앙에 오도록 스크롤
     				const scrollPosition = cardLeft - containerWidth / 2 + cardWidth / 2;
-
     				scrollContainer.scrollTo({ left: scrollPosition, behavior: 'smooth' });
     			}
     		}
     	}
 
-    	// 키보드 이벤트 처리
     	function handleKeydown(event) {
     		if (showModal) {
     			if (event.key === 'Escape') closeModal();
@@ -2711,18 +2797,20 @@ var app = (function () {
 
     		const currentVideos = videos[selectedCategory] || [];
     		const categoryIndex = categories.indexOf(selectedCategory);
+    		const maxIndex = currentVideos.length + (pageTokens[selectedCategory] ? 1 : 0);
 
     		switch (event.key) {
     			case 'ArrowUp':
     				event.preventDefault();
     				if (focusArea === 'video') {
-    					$$invalidate(1, focusArea = 'category');
+    					$$invalidate(6, focusArea = 'category');
     				}
     				break;
     			case 'ArrowDown':
     				event.preventDefault();
     				if (focusArea === 'category') {
-    					$$invalidate(1, focusArea = 'video');
+    					$$invalidate(6, focusArea = 'video');
+    					$$invalidate(5, selectedIndex = 0);
     					scrollToSelectedCard();
     				}
     				break;
@@ -2730,16 +2818,17 @@ var app = (function () {
     				event.preventDefault();
     				if (focusArea === 'category') {
     					const nextCategoryIndex = (categoryIndex + 1) % categories.length;
-    					$$invalidate(3, selectedCategory = categories[nextCategoryIndex]);
+    					$$invalidate(2, selectedCategory = categories[nextCategoryIndex]);
+    					$$invalidate(5, selectedIndex = 0);
 
     					if (!videos[selectedCategory]) {
     						fetchVideos(selectedCategory).then(result => {
-    							$$invalidate(2, videos[selectedCategory] = result, videos);
-    							$$invalidate(2, videos = { ...videos });
+    							$$invalidate(0, videos[selectedCategory] = result, videos);
+    							$$invalidate(0, videos = { ...videos });
     						});
     					}
     				} else {
-    					$$invalidate(0, selectedIndex = (selectedIndex + 1) % currentVideos.length);
+    					$$invalidate(5, selectedIndex = (selectedIndex + 1) % maxIndex);
     					scrollToSelectedCard();
     				}
     				break;
@@ -2750,34 +2839,36 @@ var app = (function () {
     					? categories.length - 1
     					: categoryIndex - 1;
 
-    					$$invalidate(3, selectedCategory = categories[prevCategoryIndex]);
+    					$$invalidate(2, selectedCategory = categories[prevCategoryIndex]);
+    					$$invalidate(5, selectedIndex = 0);
 
     					if (!videos[selectedCategory]) {
     						fetchVideos(selectedCategory).then(result => {
-    							$$invalidate(2, videos[selectedCategory] = result, videos);
-    							$$invalidate(2, videos = { ...videos });
+    							$$invalidate(0, videos[selectedCategory] = result, videos);
+    							$$invalidate(0, videos = { ...videos });
     						});
     					}
     				} else {
-    					$$invalidate(0, selectedIndex = selectedIndex === 0
-    					? currentVideos.length - 1
-    					: selectedIndex - 1);
-
+    					$$invalidate(5, selectedIndex = selectedIndex === 0 ? maxIndex - 1 : selectedIndex - 1);
     					scrollToSelectedCard();
     				}
     				break;
     			case 'Enter':
     				event.preventDefault();
-    				if (focusArea === 'video' && currentVideos[selectedIndex]) {
-    					openVideo(currentVideos[selectedIndex]);
+    				if (focusArea === 'video') {
+    					if (selectedIndex === currentVideos.length) {
+    						loadMoreVideos();
+    					} else if (currentVideos[selectedIndex]) {
+    						openVideo(currentVideos[selectedIndex]);
+    					}
     				}
     				break;
     		}
     	}
 
     	onMount(async () => {
-    		$$invalidate(2, videos[selectedCategory] = await fetchVideos(selectedCategory), videos);
-    		$$invalidate(2, videos = { ...videos });
+    		$$invalidate(0, videos[selectedCategory] = await fetchVideos(selectedCategory), videos);
+    		$$invalidate(0, videos = { ...videos });
     	});
 
     	const writable_props = [];
@@ -2796,7 +2887,7 @@ var app = (function () {
     	function div2_binding($$value) {
     		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
     			scrollContainer = $$value;
-    			$$invalidate(6, scrollContainer);
+    			$$invalidate(7, scrollContainer);
     		});
     	}
 
@@ -2805,13 +2896,16 @@ var app = (function () {
     		API_KEY,
     		categories,
     		videos,
+    		pageTokens,
     		selectedCategory,
     		selectedVideo,
     		showModal,
     		selectedIndex,
     		focusArea,
     		scrollContainer,
+    		isLoadingMore,
     		fetchVideos,
+    		loadMoreVideos,
     		selectCategory,
     		openVideo,
     		closeModal,
@@ -2820,36 +2914,33 @@ var app = (function () {
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('videos' in $$props) $$invalidate(2, videos = $$props.videos);
-    		if ('selectedCategory' in $$props) $$invalidate(3, selectedCategory = $$props.selectedCategory);
-    		if ('selectedVideo' in $$props) $$invalidate(4, selectedVideo = $$props.selectedVideo);
-    		if ('showModal' in $$props) $$invalidate(5, showModal = $$props.showModal);
-    		if ('selectedIndex' in $$props) $$invalidate(0, selectedIndex = $$props.selectedIndex);
-    		if ('focusArea' in $$props) $$invalidate(1, focusArea = $$props.focusArea);
-    		if ('scrollContainer' in $$props) $$invalidate(6, scrollContainer = $$props.scrollContainer);
+    		if ('videos' in $$props) $$invalidate(0, videos = $$props.videos);
+    		if ('pageTokens' in $$props) $$invalidate(1, pageTokens = $$props.pageTokens);
+    		if ('selectedCategory' in $$props) $$invalidate(2, selectedCategory = $$props.selectedCategory);
+    		if ('selectedVideo' in $$props) $$invalidate(3, selectedVideo = $$props.selectedVideo);
+    		if ('showModal' in $$props) $$invalidate(4, showModal = $$props.showModal);
+    		if ('selectedIndex' in $$props) $$invalidate(5, selectedIndex = $$props.selectedIndex);
+    		if ('focusArea' in $$props) $$invalidate(6, focusArea = $$props.focusArea);
+    		if ('scrollContainer' in $$props) $$invalidate(7, scrollContainer = $$props.scrollContainer);
+    		if ('isLoadingMore' in $$props) $$invalidate(8, isLoadingMore = $$props.isLoadingMore);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*selectedIndex, focusArea*/ 3) {
-    			if (selectedIndex !== undefined && focusArea === 'video') {
-    				scrollToSelectedCard();
-    			}
-    		}
-    	};
-
     	return [
-    		selectedIndex,
-    		focusArea,
     		videos,
+    		pageTokens,
     		selectedCategory,
     		selectedVideo,
     		showModal,
+    		selectedIndex,
+    		focusArea,
     		scrollContainer,
+    		isLoadingMore,
     		categories,
+    		loadMoreVideos,
     		selectCategory,
     		openVideo,
     		closeModal,

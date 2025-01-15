@@ -1,4 +1,3 @@
-<!-- MainPage.svelte -->
 <script>
   import { onMount } from 'svelte';
 
@@ -12,24 +11,39 @@
   ];
 
   let videos = {};
+  let pageTokens = {};
   let selectedCategory = categories[0];
   let selectedVideo = null;
   let showModal = false;
   let selectedIndex = 0;
   let focusArea = 'category';
   let scrollContainer;
-
-  async function fetchVideos(category) {
+  let isLoadingMore = false;
+  
+  async function fetchVideos(category, pageToken = '') {
     try {
       const response = await fetch(
-        `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${encodeURIComponent(category)}&type=video&key=${API_KEY}`
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${encodeURIComponent(category)}&type=video&key=${API_KEY}${pageToken ? `&pageToken=${pageToken}` : ''}`
       );
       const data = await response.json();
+      pageTokens[category] = data.nextPageToken;
       return data.items;
     } catch (error) {
       console.error('Error fetching videos:', error);
       return [];
     }
+  }
+
+  async function loadMoreVideos() {
+    if (isLoadingMore || !pageTokens[selectedCategory]) return;
+    
+    isLoadingMore = true;
+    const newVideos = await fetchVideos(selectedCategory, pageTokens[selectedCategory]);
+    if (newVideos.length > 0) {
+      videos[selectedCategory] = [...videos[selectedCategory], ...newVideos];
+      videos = {...videos};
+    }
+    isLoadingMore = false;
   }
 
   function selectCategory(category) {
@@ -56,13 +70,12 @@
 
   function scrollToSelectedCard() {
     if (focusArea === 'video' && scrollContainer) {
-      const selectedCard = scrollContainer.querySelector(`.video-card:nth-child(${selectedIndex + 1})`);
+      const selectedCard = scrollContainer.querySelector(`.video-card:nth-child(${selectedIndex + 1}), .load-more-button`);
       if (selectedCard) {
         const containerWidth = scrollContainer.offsetWidth;
         const cardLeft = selectedCard.offsetLeft;
         const cardWidth = selectedCard.offsetWidth;
         
-        // 선택된 카드가 컨테이너의 중앙에 오도록 스크롤
         const scrollPosition = cardLeft - (containerWidth / 2) + (cardWidth / 2);
         scrollContainer.scrollTo({
           left: scrollPosition,
@@ -72,7 +85,6 @@
     }
   }
 
-  // 키보드 이벤트 처리
   function handleKeydown(event) {
     if (showModal) {
       if (event.key === 'Escape') closeModal();
@@ -81,6 +93,7 @@
 
     const currentVideos = videos[selectedCategory] || [];
     const categoryIndex = categories.indexOf(selectedCategory);
+    const maxIndex = currentVideos.length + (pageTokens[selectedCategory] ? 1 : 0);
     
     switch(event.key) {
       case 'ArrowUp':
@@ -93,6 +106,7 @@
         event.preventDefault();
         if (focusArea === 'category') {
           focusArea = 'video';
+          selectedIndex = 0;
           scrollToSelectedCard();
         }
         break;
@@ -101,6 +115,7 @@
         if (focusArea === 'category') {
           const nextCategoryIndex = (categoryIndex + 1) % categories.length;
           selectedCategory = categories[nextCategoryIndex];
+          selectedIndex = 0;
           if (!videos[selectedCategory]) {
             fetchVideos(selectedCategory).then(result => {
               videos[selectedCategory] = result;
@@ -108,7 +123,7 @@
             });
           }
         } else {
-          selectedIndex = (selectedIndex + 1) % currentVideos.length;
+          selectedIndex = (selectedIndex + 1) % maxIndex;
           scrollToSelectedCard();
         }
         break;
@@ -117,6 +132,7 @@
         if (focusArea === 'category') {
           const prevCategoryIndex = categoryIndex === 0 ? categories.length - 1 : categoryIndex - 1;
           selectedCategory = categories[prevCategoryIndex];
+          selectedIndex = 0;
           if (!videos[selectedCategory]) {
             fetchVideos(selectedCategory).then(result => {
               videos[selectedCategory] = result;
@@ -124,14 +140,18 @@
             });
           }
         } else {
-          selectedIndex = selectedIndex === 0 ? currentVideos.length - 1 : selectedIndex - 1;
+          selectedIndex = selectedIndex === 0 ? maxIndex - 1 : selectedIndex - 1;
           scrollToSelectedCard();
         }
         break;
       case 'Enter':
         event.preventDefault();
-        if (focusArea === 'video' && currentVideos[selectedIndex]) {
-          openVideo(currentVideos[selectedIndex]);
+        if (focusArea === 'video') {
+          if (selectedIndex === currentVideos.length) {
+            loadMoreVideos();
+          } else if (currentVideos[selectedIndex]) {
+            openVideo(currentVideos[selectedIndex]);
+          }
         }
         break;
     }
@@ -141,15 +161,11 @@
     videos[selectedCategory] = await fetchVideos(selectedCategory);
     videos = {...videos};
   });
-
-  $: if (selectedIndex !== undefined && focusArea === 'video') {
-    scrollToSelectedCard();
-  }
 </script>
 
 <svelte:window on:keydown={handleKeydown}/>
 
-<div class="main-container">
+<div class="page-container">
   <header>
     <h1>맞춤 건강 정보</h1>
     <div class="category-buttons">
@@ -191,6 +207,16 @@
               </div>
             </div>
           {/each}
+          {#if pageTokens[selectedCategory]}
+            <button 
+              class="load-more-button"
+              class:selected={selectedIndex === videos[selectedCategory].length && focusArea === 'video'}
+              on:click={loadMoreVideos}
+              disabled={isLoadingMore}
+            >
+              {isLoadingMore ? '로딩 중...' : '더 보기'}
+            </button>
+          {/if}
         {:else}
           <div class="loading">영상을 불러오는 중입니다...</div>
         {/if}
@@ -217,13 +243,21 @@
 {/if}
 
 <style>
-  /* 이전 스타일 유지 */
-  .main-container {
-    max-width: 1200px;
-    margin: 0 auto;
+  /* 페이지 컨테이너 스타일 */
+  .page-container {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 20px;
+    padding-left: 250px;
+    box-sizing: border-box;
+    position: fixed;  /* 추가 */
+    top: 0;          /* 추가 */
+    left: 0;         /* 추가 */
   }
-
   header {
     text-align: center;
     margin-bottom: 40px;
@@ -261,22 +295,29 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   }
 
+  .video-section {
+    margin-top: auto;
+    width: 100%;
+  }
+
   .video-scroll {
     width: 100%;
     overflow-x: auto;
     padding: 20px 0;
-    margin-right: -20px; /* 오른쪽 여백 제거 */
+    margin-right: -20px;
   }
 
   .video-container {
     display: flex;
     gap: 20px;
-    padding: 0 10px;
-    width: max-content; /* 컨테이너가 모든 카드를 수평으로 포함하도록 함 */
+    padding: 0 20px;
+    padding-right: 40px;
+    width: max-content;
   }
+
   .video-card {
     flex: 0 0 500px;
-    height: 550px;
+    height: 600px;
     background: white;
     border-radius: 12px;
     overflow: hidden;
@@ -286,11 +327,36 @@
   }
 
   .video-card.selected {
-    outline: 3px solid #ff9900;
+    outline: 6px solid #ff9900;
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0,0,0,0.2);
   }
 
+  .load-more-button {
+    flex: 0 0 100px;
+    height: 100px;
+    margin: auto 0;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid #ff9900;
+    color: #ff9900;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .load-more-button:hover,
+  .load-more-button.selected {
+    background-color: #ff9900;
+    color: white;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
+  .load-more-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   .thumbnail-wrapper {
     position: relative;
     width: 100%;
@@ -403,5 +469,24 @@
     text-align: center;
     padding: 20px;
     color: #666;
+  }
+
+  /* 스크롤바 스타일링 */
+  .video-scroll::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .video-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  .video-scroll::-webkit-scrollbar-thumb {
+    background: #ff9900;
+    border-radius: 4px;
+  }
+
+  .video-scroll::-webkit-scrollbar-thumb:hover {
+    background: #ffc400;
   }
 </style>
